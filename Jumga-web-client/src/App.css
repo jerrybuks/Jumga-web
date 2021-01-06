@@ -1,0 +1,64 @@
+/* .App {
+} */
+a{
+  color: #000000;
+}
+.App-header-container {
+  text-align: center;
+	background-color: #EF3651;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  position: sticky;
+}
+.scroll-bar {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+.scroll-bar::-webkit-scrollbar { /* WebKit */
+  width: 0;
+  height: 0;
+}
+.App-header {
+  background-color: #ffffff;
+  min-height: 96%;
+	width: 100%;
+  min-width: 320px;
+  max-width: 420px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px 0 rgba(0,0,0,.08);
+  margin: auto;
+  z-index: 1;
+  position: relative;
+}
+
+.route-wrapper {
+  position: relative;
+}
+
+.gift1{
+  position: absolute;
+  width: 10rem;
+  bottom: 5%;
+  left: 20%;
+  transform: rotate(20deg);
+}
+
+.gift2{
+  position: absolute;
+  width: 10rem;
+  top: -1%;
+  right: 20%;
+  transform: rotate(20deg);
+}
+
+@media screen and (max-width: 600px) {
+  .App-header {
+    min-height: 100%;
+    border-radius: 0;;
+  }
+}
