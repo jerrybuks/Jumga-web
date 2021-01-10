@@ -8,7 +8,7 @@ export default function AppContainer(props) {
 			<img className="gift1" src={Gift1} alt="gift icon 1" />
 			<img className="gift2" src={Gift2} alt="gift icon 2" />
 			<div className="App-header-container">
-				<header className="App-header scroll-bar">
+				<header className="App-header">
 					{props.children}
 				</header>
 			</div>
