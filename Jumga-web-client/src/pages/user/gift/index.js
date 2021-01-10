@@ -1,7 +1,7 @@
 import React, { useEffect, Fragment } from 'react';
 import Navigation from '../../../components/navigation';
-import { selectEvents, selectIsFetchingEvents, selectIsRegistering } from '../../../redux/event/event.selector';
-import { getEventsStart, eventRegisterStart } from '../../../redux/event/event.actions';
+import { selectEvents, selectIsFetchingEvents, selectIsRegistering } from '../../../redux/productStore/productStore.selector';
+import { getEventsStart, eventRegisterStart } from '../../../redux/productStore/productStore.actions';
 import { selectCurrentUser } from '../../../redux/user/user.selectors';
 import { createStructuredSelector } from 'reselect';
 import GiftList from './giftList';

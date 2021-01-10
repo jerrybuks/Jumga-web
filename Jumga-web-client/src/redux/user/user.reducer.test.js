@@ -5,7 +5,7 @@ const initialState = {
     currentUser: null,
     error: null,
     isFetchingUser: true,
-    isLoggingIn: null,
+    isAuthenticating: null,
     isSendingEmail: null
   };
   

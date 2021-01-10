@@ -1,35 +1,36 @@
-import React, { Fragment, useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { formatLocaleCurrency } from 'country-currency-map';
+// import { formatLocaleCurrency } from 'country-currency-map';
 import Navigation from '../../../components/navigation';
 import MenuBar from './MenuBar';
-import Wallet from './Wallet';
-import { selectEvents, selectNotifications, selectIsFetchingEvents } from '../../../redux/event/event.selector';
-import { getEventsStart, eventRegisterStart } from '../../../redux/event/event.actions';
-import { selectCurrentUser } from '../../../redux/user/user.selectors';
-import { createStructuredSelector } from 'reselect';
-import Spinner from '../../../components/spinner/Spinner';
-import { Box, Card } from '@material-ui/core';
-import { useStyles } from './styles';
-import { Link } from 'react-router-dom';
+// import Wallet from './Wallet';
+// import { selectEvents, selectNotifications, selectIsFetchingEvents } from '../../../redux/productStore/productStore.selector';
+// import { getEventsStart, eventRegisterStart } from '../../../redux/productStore/productStore.actions';
+// import { selectCurrentUser } from '../../../redux/user/user.selectors';
+// import { createStructuredSelector } from 'reselect';
+// import Spinner from '../../../components/spinner/Spinner';
+// import { Box, Card } from '@material-ui/core';
+// import { useStyles } from './styles';
+// import { Link } from 'react-router-dom';
 
 
-const Profile = ({ getEventsStart, user: { id: userId, country, displayName }, events, isLoading, notifications }) => {
-    const classes = useStyles();
-	useEffect(
-		() => {
-			if (userId && events.length === 0) getEventsStart(userId);
-		},
-		//eslint-disable-next-line
-		[ events ]
-	);
+const Profile = (props) => {
+	// const { getEventsStart, user: { id: userId, country, displayName }, events, isLoading, notifications } = props
+    // const classes = useStyles();
+	// useEffect(
+	// 	() => {
+	// 		if (userId && events.length === 0) getEventsStart(userId);
+	// 	},
+	// 	//eslint-disable-next-line
+	// 	[ events ]
+	// );
 
-	const { unreadNotifications } = notifications;
+	// const { unreadNotifications } = notifications;
 	return (
 		<div>
 			<Navigation path="profile">
 				<MenuBar />
-				<Box px="1rem" component="h2">
+				{/* <Box px="1rem" component="h2">
 					Hello,
 				</Box>
 				{isLoading ? <Spinner /> : <Wallet {...{ events, country, displayName, userId }} />}
@@ -68,23 +69,24 @@ const Profile = ({ getEventsStart, user: { id: userId, country, displayName }, e
 								No  Recent Gifters
 							</Box> }
 							
-				</Card>
+				</Card> */}
+				Profile
 			</Navigation>
 		</div>
 	);
 };
 
-const mapDispatchToProps = (dispatch) => ({
-	getEventsStart: (userId) => dispatch(getEventsStart(userId)),
-	eventRegisterStart: (eventName, userId) => dispatch(eventRegisterStart({ eventName, userId }))
-});
+// const mapDispatchToProps = (dispatch) => ({
+// 	getEventsStart: (userId) => dispatch(getEventsStart(userId)),
+// 	eventRegisterStart: (eventName, userId) => dispatch(eventRegisterStart({ eventName, userId }))
+// });
 
-const mapStateToProps = createStructuredSelector({
-	user: selectCurrentUser,
-	events: selectEvents,
-	notifications: selectNotifications,
-	isLoading: selectIsFetchingEvents
-	// isLoggingIn: selectIsLoggingIn
-});
+// const mapStateToProps = createStructuredSelector({
+// 	user: selectCurrentUser,
+// 	events: selectEvents,
+// 	notifications: selectNotifications,
+// 	isLoading: selectIsFetchingEvents
+// 	// isAuthenticating: selectIsAuthenticating
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(null, null)(Profile);

@@ -20,7 +20,7 @@ describe('AuthForm Component', () => {
 			emailSignInStart: mockEmailSignInStart,
 			googleSignInStart: mockGoogleSignInStart,
 			signUpStart: mockSignUpStart,
-			isLoggingIn: false
+			isAuthenticating: false
 		};
 		shallow = createShallow();
 		wrapper = shallow(<AuthForm {...mockProps} />);

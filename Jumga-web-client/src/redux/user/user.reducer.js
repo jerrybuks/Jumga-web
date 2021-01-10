@@ -4,7 +4,7 @@ const INITIAL_STATE = {
 	currentUser: null,
 	error: null,
 	isFetchingUser: true,
-	isLoggingIn: null,
+	isAuthenticating: null,
 	isSendingEmail: null,
 	// isUpdatingUser: null
 };
@@ -17,7 +17,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
 				...state,
 				currentUser: action.payload,
 				isFetchingUser: false,
-				isLoggingIn: false,
+				isAuthenticating: false,
 				error: null
 			};
 		case UserActionTypes.SIGN_OUT_SUCCESS:
@@ -32,7 +32,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
 		case UserActionTypes.UPDATE_USER_START:
 			return {
 				...state,
-				isLoggingIn: true
+				isAuthenticating: true
 			};
 		case UserActionTypes.SIGN_IN_FAILURE:
 		case UserActionTypes.SIGN_OUT_FAILURE:
@@ -42,7 +42,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
 				...state,
 				error: action.payload,
 				isFetchingUser: false,
-				isLoggingIn: false
+				isAuthenticating: false
 			};
 		case UserActionTypes.SEND_EMAIL_VERIFY_START:
 		case UserActionTypes.SEND_PASSWORD_RESET_START:

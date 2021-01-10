@@ -1,10 +1,20 @@
 const admin = require('firebase-admin');
+const functions = require('firebase-functions');
 const Flutterwave = require('flutterwave-node-v3');
 
-const PUBLIC_KEY = 'FLWPUBK_TEST-518c8ab64b05b47762240a5f353bee1e-X';
-const SECRET_KEY = 'FLWSECK_TEST-cf84f6c1d6e9121822fe8580751c3758-X';
+const PUBLIC_KEY = functions.config().service.fw_public_key;
+const SECRET_KEY = functions.config().service.fw_secret_key;
 const flw = new Flutterwave(PUBLIC_KEY, SECRET_KEY);
 
+
+const checkHash = (hash) => {
+    const secret_hash = functions.config().service.my_hash;
+    if(!hash || hash !== secret_hash) {
+		// discard the request,only a post with the right Flutterwave signature header gets our attention 
+		return 400;
+    }
+    return 200 ;
+}
 
 const verifyTransaction = async (tx_id) => {
 	try {
@@ -18,6 +28,16 @@ const verifyTransaction = async (tx_id) => {
 		return error;
 	}
 };
+
+const updateUserProperty = async (id,userData,db) => {
+	try {
+		const docRef = await db.collection('users').doc(id);
+		await docRef.update(userData);
+	} catch (error) {
+		console.log(error)
+	}
+	return
+}
 
 const formatGifts = (giftObj) => {
 	const formmatedObj = {};
@@ -134,7 +154,8 @@ const extractNewGiftDetails = (verifactionRes, gifts) => {
 	};
 };
 
-
+exports.updateUserProperty = updateUserProperty;
+exports.checkHash = checkHash;
 exports.verifyTransaction = verifyTransaction;
 exports.formatGifts = formatGifts;
 exports.updateGiftDetails = updateGiftDetails

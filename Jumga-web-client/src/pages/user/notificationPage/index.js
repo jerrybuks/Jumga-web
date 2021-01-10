@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import Navigation from '../../../components/navigation'
-import { selectNotifications } from '../../../redux/event/event.selector';
-import { clearNotificationsStart } from '../../../redux/event/event.actions';
+import { selectNotifications } from '../../../redux/productStore/productStore.selector';
+import { clearNotificationsStart } from '../../../redux/productStore/productStore.actions';
 import { createStructuredSelector } from 'reselect';
 import { Card, Box } from '@material-ui/core';
 import { formatLocaleCurrency } from 'country-currency-map';

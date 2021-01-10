@@ -10,11 +10,11 @@ import {
   selectEvents,
   selectIsFetchingEvents,
   selectIsRegistering,
-} from "../../../redux/event/event.selector";
+} from "../../../redux/productStore/productStore.selector";
 import {
   getEventsStart,
   eventRegisterStart,
-} from "../../../redux/event/event.actions";
+} from "../../../redux/productStore/productStore.actions";
 import { selectCurrentUser } from "../../../redux/user/user.selectors";
 import { createStructuredSelector } from "reselect";
 import Spinner from "../../../components/spinner/Spinner";
@@ -162,7 +162,7 @@ const mapStateToProps = createStructuredSelector({
   events: selectEvents,
   isLoading: selectIsFetchingEvents,
   isSaving: selectIsRegistering,
-  // isLoggingIn: selectIsLoggingIn
+  // isAuthenticating: selectIsAuthenticating
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Events);

@@ -17,8 +17,8 @@ const VerifyUser = ({ sendEmailVerifyStart, isSending }) => {
 	const classes = useStyles();
 	return (
 		<div>
-			You have not verified your account, please kindly verify your account using the link sent to you. If you can
-			find the initialverificatiaon link. then click here to
+			You have not verified your account, please kindly verify your account using the link sent to you. If you can't
+			find the initial verificatiaon link. then click here to
 			<Box onClick={sendEmailVerifyStart} className={classes.resendLink}>
 				resend email. {isSending && <CircularProgress color="inherit" size={15} />}
 			</Box>

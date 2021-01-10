@@ -1,6 +1,6 @@
 import { takeLatest, put, all, call, take } from 'redux-saga/effects';
 import { notify } from '../../utils/notify';
-import EventActionTypes from './event.types';
+import ProductStoreActionTypes from './productStore.types';
 
 import {
 	getEventsSuccess,
@@ -10,16 +10,18 @@ import {
 	getNotificationsFailure,
 	clearNotificationsSuccess,
 	clearNotificationsFailure,
-	eventRegisterSuccess,
-	eventRegisterFailure,
 	giftRegisterSuccess,
 	giftRegisterFailure,
 	payoutSuccess,
-	payoutFailure
-} from './event.actions';
+	payoutFailure,
+
+	productStoreRegisterSuccess,
+	productStoreRegisterFailure
+} from './productStore.actions';
 
 import { db, createEventChannel, uploadFileChannel } from '../../firebase/firebase.utils';
 import { firestore } from 'firebase';
+import { updateUserStart } from '../user/user.actions';
 
 export function* getEvents({ payload: userId }) {
 	try {
@@ -70,31 +72,33 @@ export function* clearNotifications({ payload:  { id, readnotifications, unreadN
 	}
 }
 
-export function* registerEvent({ payload }) {
+/** currently here */
+export function* registerProductStore({ payload }) {
+	console.log(payload,9999)
 	try {
-		const { eventName, eventCoverImg, eventDesc, currency, userId } = payload;
+		const { storeData : {storeCoverImg, ...otherStoreDet},  userId } = payload;
 		let imgUrlInStorage = "";
-		if(eventCoverImg){
-			 imgUrlInStorage = yield uploadImage(eventCoverImg);
+		if(storeCoverImg){
+			 imgUrlInStorage = yield uploadImage(storeCoverImg);
 
 		}
-		const event = {
-			eventName,
-			eventOwner: userId,
-			imgUrl: imgUrlInStorage,
-			eventDesc,
-			gifts: [],
-			status: 'open',
-			withdrawn: false,
-			currency,
+		const storeDet = {
+			...otherStoreDet,
+			storeOwner: userId,
+			storeImgUrl: imgUrlInStorage,
+			products: [],
 			createdAt: firestore.FieldValue.serverTimestamp()
 		};
-		 yield db.collection('events').add(event);
+		 yield db.collection('stores').add(storeDet);
 		// const doc = yield docRef.get();
-		yield put(eventRegisterSuccess());
-		yield getEvents({payload: userId})
+		const userData = {
+			hasStore: true,
+		}
+		yield put(updateUserStart({ userId, userData }))
+		yield put(productStoreRegisterSuccess());
+
 	} catch (error) {
-		yield put(eventRegisterFailure(error));
+		yield put(productStoreRegisterFailure(error));
 		yield notify(error.message, 'error');
 	}
 }
@@ -156,32 +160,32 @@ export function* procceedWithPayout({ payload: { transferObj, userId } }) {
 	}
 }
 
-export function* onGetEventStart() {
-	yield takeLatest(EventActionTypes.GET_EVENTS_START, getEvents);
+export function* onGetProductStoreStart() {
+	yield takeLatest(ProductStoreActionTypes.GET_PRODUCTSTORE_START, getEvents);
 }
 export function* onGetNotificationsStart() {
-	yield takeLatest(EventActionTypes.GET_NOTIFICATIONS_START, getNotifications);
+	yield takeLatest(ProductStoreActionTypes.GET_NOTIFICATIONS_START, getNotifications);
 }
 export function* onClearNotificationsStart() {
-	yield takeLatest(EventActionTypes.CLEAR_NOTIFICATIONS_START, clearNotifications);
+	yield takeLatest(ProductStoreActionTypes.CLEAR_NOTIFICATIONS_START, clearNotifications);
 }
-export function* onEventRegisterStart() {
-	yield takeLatest(EventActionTypes.EVENT_REGISTER_START, registerEvent);
+export function* onProductStoreRegisterStart() {
+	yield takeLatest(ProductStoreActionTypes.PRODUCTSTORE_REGISTER_START, registerProductStore);
 }
 
-export function* onGiftRegisterStart() {
-	yield takeLatest(EventActionTypes.GIFT_REGISTER_START, registerGift);
-}
+// export function* onGiftRegisterStart() {
+// 	yield takeLatest(ProductStoreActionTypes.GIFT_REGISTER_START, registerGift);
+// }
 
 export function* onPayoutStart() {
-	yield takeLatest(EventActionTypes.PAYOUT_START, procceedWithPayout);
+	yield takeLatest(ProductStoreActionTypes.PAYOUT_START, procceedWithPayout);
 }
 
-export function* eventSagas() {
+export function* productStoreSagas() {
 	yield all([
-		call(onEventRegisterStart),
-		call(onGetEventStart),
-		call(onGiftRegisterStart),
+		call(onProductStoreRegisterStart),
+		call(onGetProductStoreStart),
+		// call(onGiftRegisterStart),
 		call(onPayoutStart),
 		call(onGetNotificationsStart),
 		call(onClearNotificationsStart)

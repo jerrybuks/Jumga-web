@@ -5,8 +5,8 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import { Box, CircularProgress, Button } from '@material-ui/core';
 import { connect } from 'react-redux'
-import { payoutStart } from '../../../redux/event/event.actions';
-import { selectIsPayingout } from '../../../redux/event/event.selector';
+import { payoutStart } from '../../../redux/productStore/productStore.actions';
+import { selectIsPayingout } from '../../../redux/productStore/productStore.selector';
 import { createStructuredSelector } from 'reselect';
 import { formatLocaleCurrency } from 'country-currency-map/lib/formatCurrency';
 import useFetch from '../../../custom-hooks/useFetch';

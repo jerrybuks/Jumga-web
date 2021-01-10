@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-const selectEventsState = state => state.eventsState;
+const selectEventsState = state => state.productStore;
 
 export const selectEvents = createSelector(
   [selectEventsState],
@@ -12,10 +12,10 @@ export const selectIsFetchingEvents = createSelector(
   eventsState => eventsState.isFetchingEvents
 );
 
-export const selectIsRegistering = createSelector(
-  [selectEventsState],
-  eventsState => eventsState.isRegistering
-);
+// export const selectIsRegistering = createSelector(
+//   [selectEventsState],
+//   eventsState => eventsState.isRegistering
+// );
 
 export const selectIsPayingout = createSelector(
   [selectEventsState],
@@ -30,4 +30,11 @@ export const selectNotifications = createSelector(
 export const selectLoadNotifications = createSelector(
   [selectEventsState],
   eventsState => eventsState.shouldLoadNotifications
+);
+
+
+const selectProductStore = state => state.productStore;
+export const selectIsRegistering = createSelector(
+  [selectProductStore],
+  productStore => productStore.isRegistering
 );

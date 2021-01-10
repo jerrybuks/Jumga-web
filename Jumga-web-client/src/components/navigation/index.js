@@ -2,23 +2,24 @@ import React, { Fragment, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import EventIcon from '@material-ui/icons/EventOutlined';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 import ContactSupportOutlinedIcon from '@material-ui/icons/ContactSupportOutlined';
 import { Box, AppBar } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
-import { selectNotifications, selectLoadNotifications } from '../../redux/event/event.selector';
-import { getNotificationsStart } from '../../redux/event/event.actions';
+import { selectNotifications, selectLoadNotifications } from '../../redux/productStore/productStore.selector';
+import { getNotificationsStart } from '../../redux/productStore/productStore.actions';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import StoreIcon from '@material-ui/icons/ShopOutlined';
+import HomeIcon from '@material-ui/icons/HomeOutlined';
+
 
 export const useStyles = makeStyles((theme) => ({
 	root: {
 		width: 'inherit',
-		boxShadow: 'rgba(0, 0, 0, 0.1) 0px 2px 4px 0px'
+		boxShadow: 'rgba(0, 0, 0, 0.1) 0px 2px 4px 0px',
 	},
 	iconStyle: {
 		color: `rgba(0, 0, 0, 0.50)`
@@ -71,26 +72,27 @@ function Navigation(props) {
 	});
 	return (
 		<Fragment>
-			<AppBar position="sticky">
+			<AppBar position="sticky" style={{position: 'absolute',
+		bottom:0, top:"auto"}}>
 				<BottomNavigation value={props.path} onChange={handleChange} className={classes.root}>
 					<BottomNavigationAction
 						label="Profile"
 						value="profile"
 						className={classes.iconStyle}
-						icon={<PersonOutlineOutlinedIcon />}
+						icon={<HomeIcon />}
 					/>
 					<BottomNavigationAction
 						label="Notification"
 						value="notifications"
 						className={classes.iconStyle}
-						icon={<NotificationsIcon />}
+						icon={<NotificationsIcon  />}
 						component={NotificationCount}
 					/>
 					<BottomNavigationAction
 						label="Events"
 						value="events"
 						className={classes.iconStyle}
-						icon={<EventIcon />}
+						icon={<StoreIcon  />}
 					/>
 					<BottomNavigationAction
 						label="Help"

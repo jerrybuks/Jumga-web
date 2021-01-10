@@ -1,64 +1,200 @@
-import React, { useState, useEffect } from 'react';
-import Select from 'react-select';
-import countryList from 'react-select-country-list';
-import { Button, Box, CircularProgress } from '@material-ui/core';
-import { getCountry } from 'country-currency-map';
-import { updateUserStart } from '../../../redux/user/user.actions';
-import { selectCurrentUser, selectIsLoggingIn } from '../../../redux/user/user.selectors';
-import { createStructuredSelector } from 'reselect';
-import { connect } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import Select from "react-select";
+import countryList from "react-select-country-list";
+import { Button, Box, CircularProgress, FormLabel } from "@material-ui/core";
+import { getCountry } from "country-currency-map";
+import { FormTextField } from "../../../components/formTextField";
+import { selectCurrentUser, selectIsAuthenticating } from "../../../redux/user/user.selectors";
+import { selectIsRegistering } from "../../../redux/productStore/productStore.selector";
+import { createStructuredSelector } from "reselect";
+import { connect } from "react-redux";
+import { useStyles } from "./styles";
+import { productStoreRegisterStart } from "../../../redux/productStore/productStore.actions";
 
-function CountrySelector({ updateUserStart, user, isSaving, history }) {
-	const options = countryList().getData();
-	const [ state, setstate ] = useState({ options, value: null });
+function CountrySelector({ productStoreRegisterStart, user, isSaving, isReAuthenticating, history }) {
+  const countryOptions = countryList().getData();
+  const [state, setstate] = useState({
+    country: null,
+    storeCat: null,
+    storeName: "",
+    storeCoverImg: "",
+    isLargeFile: false,
+    storeDesc: "",
+  });
+  const [triedSubmit, setTriedSubmit] = useState(false);
+  const formRef = React.useRef();
+  const classes = useStyles();
+  const SelectChangeHandler = (e, name) => {
+    setstate({ ...state, [name]: e });
+  };
 
-	const changeHandler = (value) => {
-		setstate({ ...state, value });
-	};
+  useEffect(() => {
+    if (user.hasStore) {
+      history.push("/verifyStore");
+    }
+  }, [user.hasStore, history]);
+  const { storeName, storeDesc, isLargeFile, storeCat, country } = state;
+  const handleChange = (e) => {
+    console.log(e);
+    setstate({ ...state, [e.target.name]: e.target.value });
+  };
 
-	useEffect(() => {
-		if(user.currency) {
-			history.push("/profile")
-		}
-		 //eslint-disable-next-line
-	}, [ user.currency ])
+  const handleFileSelect = (e) => {
+    console.log(e.target.files);
+    if (e.target.files[0]?.size > 1000000) {
+      setstate({
+        ...state,
+        storeCoverImg: e.target.files[0],
+        isLargeFile: true,
+      });
+    } else {
+      setstate({
+        ...state,
+        storeCoverImg: e.target.files[0] || "",
+        isLargeFile: false,
+      });
+    }
+  };
 
-	const handleSubmit = () => {
-		const countryDet = getCountry(state.value.label);
-		let currency = 'USD';
-		if (countryDet) {
-			currency = countryDet.currency;
-		}
+  const handleSubmit = () => {
+    setTriedSubmit(true);
+    if (
+      formRef.current.reportValidity() &&
+      !isLargeFile &&
+      storeCat &&
+      country
+    ) {
+      const countryDet = getCountry(country.label);
+      let currency = countryDet?.currency || "USD";
 
-        updateUserStart({ country: state.value.label, currency }, user.id);
-	};
-
-	return (
-		<Box display="flex" justifyContent="center" alignItems="center" height="80vh">
-			<Box width="25vw">
-				<Box textAlign="left" my={2} fontWeight="bold" fontSize="1.2rem">
-					please select country*
-				</Box>
-				<Box>
-					<Select options={state.options} value={state.value} onChange={changeHandler} />
-				</Box>
-				<Box textAlign="end" my="1rem">
-					<Button color="primary" variant="contained" onClick={handleSubmit} disabled={!state.value}>
-						{!isSaving ? 'continue' : <CircularProgress color="inherit" size={15} />}
-					</Button>
-				</Box>
-			</Box>
-		</Box>
-	);
+      const { isLargeFile, ...storeInfo } = state;
+      console.log({ ...storeInfo, currency });
+      productStoreRegisterStart({ ...storeInfo, currency }, user.id);
+    }
+  };
+  console.log(state, 88888);
+  return (
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="80vh"
+    >
+      <Box>
+        <form className={classes.root} autoComplete="off" ref={formRef}>
+          <Box textAlign="left" my={2} fontWeight="bold" fontSize="1.2rem">
+            Settting up Store...
+          </Box>
+          <Box mb="1rem">
+            <Box textAlign="left">
+              <FormLabel htmlFor="files">
+                select a cover image for your store
+              </FormLabel>
+            </Box>
+            <FormTextField
+              id="files"
+              variant="outlined"
+              size="small"
+              type="file"
+              onChange={handleFileSelect}
+              required
+            />
+            {isLargeFile && (
+              <Box my={2} textAlign="left" color="red">
+                please select a file not greater than 1mb
+              </Box>
+            )}
+          </Box>
+          <Box mb="1rem">
+            <FormTextField
+              id="outlined-size-small"
+              variant="outlined"
+              size="small"
+              // className={classes.eventBtn}
+              name="storeName"
+              placeholder="store name"
+              value={storeName}
+              onChange={handleChange}
+              required
+            />
+          </Box>
+          <Box mb="1rem">
+            <Select
+              name="storeCat"
+              options={storeCategories}
+              placeholder="select store category"
+              value={state.storeCat}
+              onChange={(e) => SelectChangeHandler(e, "storeCat")}
+              required
+            />
+          </Box>
+          {!storeCat && triedSubmit && (
+            <Box my={1} textAlign="left" color="red">
+              please select a category
+            </Box>
+          )}
+          <Box mb="1rem">
+            <FormTextField
+              variant="outlined"
+              size="small"
+              name="storeDesc"
+              aria-label="minimum height"
+              rows={3}
+              placeholder="store description"
+              multiline={true}
+              value={storeDesc}
+              onChange={handleChange}
+              required
+            />
+          </Box>
+          <Box>
+            <Select
+              name="country"
+              placeholder="select your country"
+              options={countryOptions}
+              value={state.country}
+              onChange={(e) => SelectChangeHandler(e, "country")}
+              required
+            />
+          </Box>
+          {!country && triedSubmit && (
+            <Box my={1} textAlign="left" color="red">
+              please select your country
+            </Box>
+          )}
+          <Box textAlign="end" my="1rem">
+            <Button color="primary" variant="contained" onClick={handleSubmit} disabled={isSaving||isReAuthenticating}>
+              {!isSaving  ? (
+               !isReAuthenticating ? "continue" : "finishing..."
+              ) : (
+                <CircularProgress color="inherit" size={15} />
+              )}
+            </Button>
+          </Box>
+        </form>
+      </Box>
+    </Box>
+  );
 }
 
+const storeCategories = [
+  { value: "fashion", label: "fashion" },
+  { value: "food", label: "food and beverages" },
+  { value: "electronic", label: "electronic" },
+  { value: "construction", label: "construction" },
+  { value: "education", label: "education" },
+  { value: "others", label: "others" },
+];
+
 const mapDispatchToProps = (dispatch) => ({
-	updateUserStart: (userData, userId) => dispatch(updateUserStart({ userData, userId }))
+	productStoreRegisterStart: (storeData, userId) =>
+    dispatch(productStoreRegisterStart({ storeData, userId })),
 });
 
 const mapStateToProps = createStructuredSelector({
-	user: selectCurrentUser,
-	isSaving: selectIsLoggingIn
+  user: selectCurrentUser,
+  isSaving: selectIsRegistering,
+  isReAuthenticating: selectIsAuthenticating
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CountrySelector);

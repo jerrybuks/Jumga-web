@@ -9,7 +9,7 @@ import { ValidationTextField, useStyles } from './styles';
 // import { PrimaryButton } from '../cutomButtons/buttons';
 import AuthFormFooter from './authFormFooter';
 
-export default function AuthForm({ location, emailSignInStart, googleSignInStart, signUpStart, isLoggingIn }) {
+export default function AuthForm({ location, emailSignInStart, googleSignInStart, signUpStart, isAuthenticating }) {
 	const classes = useStyles();
 	const [ action, setAction ] = useState(location.state);
 	const [ state, setState ] = useState({ name: '', email: '', password: '', showPassword: false });
@@ -99,10 +99,10 @@ export default function AuthForm({ location, emailSignInStart, googleSignInStart
 							size="large"
 							color="primary"
 							onClick={handleSignInAndUp}
-							disabled={isLoggingIn}
+							disabled={isAuthenticating}
 							className={classes.btn}
 						>
-							{!isLoggingIn ? action || 'sign in' : <CircularProgress color="primary" size={15} />}{' '}
+							{!isAuthenticating ? action || 'sign in' : <CircularProgress color="primary" size={15} />}{' '}
 						</Button>
 					</Box>
 					<Box my="1rem">or</Box>

@@ -12,9 +12,9 @@ export const selectIsFetchingUser = createSelector(
   user => user.isFetchingUser
 );
 
-export const selectIsLoggingIn = createSelector(
+export const selectIsAuthenticating = createSelector(
   [selectUser],
-  user => user.isLoggingIn
+  user => user.isAuthenticating
 );
 
 export const selectIsUpdatingUser = createSelector(
