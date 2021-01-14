@@ -33,7 +33,7 @@ a{
   margin: auto;
   z-index: 1;
   position: relative;
-  padding: 1rem;
+  /* padding: 1rem; */
 }
 
 .route-wrapper {
