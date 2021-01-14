@@ -72,8 +72,7 @@ function Navigation(props) {
 	});
 	return (
 		<Fragment>
-			<AppBar position="sticky" style={{position: 'absolute',
-		bottom:0, top:"auto"}}>
+			<AppBar position="sticky" >
 				<BottomNavigation value={props.path} onChange={handleChange} className={classes.root}>
 					<BottomNavigationAction
 						label="Profile"
@@ -121,3 +120,5 @@ const mapStateToProps = createStructuredSelector({
 });
 
 export default compose(connect(mapStateToProps, mapDispatchToProps), withRouter)(Navigation);
+
+// style={{position: 'absolute',bottom:0, top:"auto"}}
