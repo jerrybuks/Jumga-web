@@ -1,92 +1,130 @@
-import React from 'react';
-import { connect } from 'react-redux';
-// import { formatLocaleCurrency } from 'country-currency-map';
-import Navigation from '../../../components/navigation';
-import MenuBar from './MenuBar';
-// import Wallet from './Wallet';
-// import { selectEvents, selectNotifications, selectIsFetchingEvents } from '../../../redux/productStore/productStore.selector';
-// import { getEventsStart, eventRegisterStart } from '../../../redux/productStore/productStore.actions';
-// import { selectCurrentUser } from '../../../redux/user/user.selectors';
-// import { createStructuredSelector } from 'reselect';
-// import Spinner from '../../../components/spinner/Spinner';
-// import { Box, Card } from '@material-ui/core';
-// import { useStyles } from './styles';
-// import { Link } from 'react-router-dom';
-
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+// import { formatLocaleCurrency } from "country-currency-map";
+import Navigation from "../../../components/navigation";
+import MenuBar from "./MenuBar";
+import {
+  selectNotifications,
+  selectIsFetchingProductStore,
+  selectIsGettingPurchases,
+  selectProducts,
+  selectStoreDetails,
+  selectPurchases
+} from "../../../redux/productStore/productStore.selector";
+import {
+  getProductStoreStart,
+  getPurchasesStart,
+} from "../../../redux/productStore/productStore.actions";
+import { selectCurrentUser } from "../../../redux/user/user.selectors";
+import { createStructuredSelector } from "reselect";
+import Spinner from "../../../components/spinner/Spinner";
+import { Box } from "@material-ui/core";
+// import { useStyles } from "./styles";
 
 const Profile = (props) => {
-	// const { getEventsStart, user: { id: userId, country, displayName }, events, isLoading, notifications } = props
-    // const classes = useStyles();
-	// useEffect(
-	// 	() => {
-	// 		if (userId && events.length === 0) getEventsStart(userId);
-	// 	},
-	// 	//eslint-disable-next-line
-	// 	[ events ]
-	// );
-
-	// const { unreadNotifications } = notifications;
-	return (
-		<div>
-			<Navigation path="profile">
-				<MenuBar />
-				{/* <Box px="1rem" component="h2">
-					Hello,
-				</Box>
-				{isLoading ? <Spinner /> : <Wallet {...{ events, country, displayName, userId }} />}
-                <Box px="1rem" component="h3">
-						Recent Gifters
-					</Box>
-				<Card className={classes.profileCard}>
-					{unreadNotifications.length > 0 ?
-					
-					<Fragment>
-						{unreadNotifications
-							.slice(0, 3)
-							.map(({ name, giftName, amount_settled, currency, eventName, tx_id }) => (
-								<Box key={tx_id}>
-									<Box py="5px">
-										<Box component="span" fontWeight="bold">
-											{name}
-										</Box>
-										<Box component="span"> sent you</Box>
-										<Box component="span" fontStyle="italic">
-											{' '}
-											"{giftName}"
-										</Box>
-										<Box component="span"> sent you</Box>
-										<Box component="span" color="red"> {formatLocaleCurrency(amount_settled,currency)}</Box>
-										<Box component="span"> {`for your ${eventName}`}</Box>
-									</Box>
-								</Box>
-							))
-							// <Link to="/notifications" ><Box color="red">view all</Box></Link>
-							}
-							<Link to="/notifications" ><Box color="red">view all</Box></Link>
-					</Fragment>
-						
-							: <Box>
-								No  Recent Gifters
-							</Box> }
-							
-				</Card> */}
-				Profile
-			</Navigation>
-		</div>
-	);
+  const {
+    getProductStoreStart,
+    user: { id: userId, displayName },
+	isLoadingPurchases,
+	purchases,
+    getPurchasesStart,
+    storeDet,
+    products,
+  } = props;
+//   const classes = useStyles();
+  useEffect(
+    () => {
+      if (userId && products.length === 0) getProductStoreStart(userId);
+      console.log(storeDet, 666666666);
+      if (storeDet) getPurchasesStart(storeDet.id);
+    },
+    //eslint-disable-next-line
+    [getProductStoreStart, getPurchasesStart, storeDet]
+  );
+console.log(purchases,999)
+//   const { unreadNotifications } = notifications;
+  return (
+    <div>
+      <Navigation path="profile">
+        <MenuBar />
+        <Box px="1rem" component="h2">
+          Hello {displayName},
+        </Box>
+        {isLoadingPurchases ? (
+          <Spinner />
+        ) : purchases.length === 0 ? (
+          <Box px="1rem">You have not made any sales </Box>
+        ) : (
+          <Box px="1rem">well done, you are making sales!</Box>
+        )}
+        <Box px="1rem" component="h3">
+          Recent Purchases
+        </Box>
+        {/* <Card className={classes.profileCard}>
+          {unreadNotifications.length > 0 ? (
+            <Fragment>
+              {
+                unreadNotifications
+                  .slice(0, 3)
+                  .map(
+                    ({
+                      name,
+                      giftName,
+                      amount_settled,
+                      currency,
+                      eventName,
+                      tx_id,
+                    }) => (
+                      <Box key={tx_id}>
+                        <Box py="5px">
+                          <Box component="span" fontWeight="bold">
+                            {name}
+                          </Box>
+                          <Box component="span"> sent you</Box>
+                          <Box component="span" fontStyle="italic">
+                            {" "}
+                            "{giftName}"
+                          </Box>
+                          <Box component="span"> sent you</Box>
+                          <Box component="span" color="red">
+                            {" "}
+                            {formatLocaleCurrency(amount_settled, currency)}
+                          </Box>
+                          <Box component="span"> {`for your ${eventName}`}</Box>
+                        </Box>
+                      </Box>
+                    )
+                  )
+                // <Link to="/notifications" ><Box color="red">view all</Box></Link>
+              }
+              <Link to="/notifications">
+                <Box color="red">view all</Box>
+              </Link>
+            </Fragment>
+          ) : (
+            <Box>No Recent Gifters</Box>
+          )}
+        </Card> */}
+      </Navigation>
+    </div>
+  );
 };
 
-// const mapDispatchToProps = (dispatch) => ({
-// 	getEventsStart: (userId) => dispatch(getEventsStart(userId)),
-// 	eventRegisterStart: (eventName, userId) => dispatch(eventRegisterStart({ eventName, userId }))
-// });
+const mapDispatchToProps = (dispatch) => ({
+  getProductStoreStart: (userId) => dispatch(getProductStoreStart(userId)),
+  getPurchasesStart: (storeId) => dispatch(getPurchasesStart(storeId)),
+  // eventRegisterStart: (eventName, userId) => dispatch(eventRegisterStart({ eventName, userId }))
+});
 
-// const mapStateToProps = createStructuredSelector({
-// 	user: selectCurrentUser,
-// 	events: selectEvents,
-// 	notifications: selectNotifications,
-// 	isLoading: selectIsFetchingEvents
-// 	// isAuthenticating: selectIsAuthenticating
-// });
+const mapStateToProps = createStructuredSelector({
+  user: selectCurrentUser,
+  products: selectProducts,
+  notifications: selectNotifications,
+  isLoading: selectIsFetchingProductStore,
+  isLoadingPurchases: selectIsGettingPurchases,
+  storeDet: selectStoreDetails,
+  purchases: selectPurchases
+  // isAuthenticating: selectIsAuthenticating
+});
 
-export default connect(null, null)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

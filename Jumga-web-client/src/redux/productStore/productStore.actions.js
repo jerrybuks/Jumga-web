@@ -60,6 +60,21 @@ export const  registerSubStoreFailure = error => ({
   payload: error
 });
 
+export const getPurchasesStart = (storeId) => ({
+  type: ProductStoreActionTypes.GET_PURCHASES_START,
+  payload: storeId
+});
+
+export const  getPurchasesSuccess = (purchases) => ({
+  type: ProductStoreActionTypes.GET_PURCHASES_SUCCESS,
+  payload: purchases
+});
+
+export const  getPurchasesFailure = error => ({
+  type: ProductStoreActionTypes.GET_PURCHASES_FAILURE,
+  payload: error
+});
+
 //abstract
 
 export const getNotificationsStart = (userId) => ({

@@ -14,7 +14,9 @@ import {
 	getProductStoreSuccess,
 	getProductStoreFailure,
 	registerSubStoreSuccess,
-	registerSubStoreFailure
+	registerSubStoreFailure,
+	getPurchasesSuccess,
+	getPurchasesFailure,
 } from './productStore.actions';
 
 import { db, createProductStoreChannel, uploadFileChannel } from '../../firebase/firebase.utils';
@@ -180,19 +182,22 @@ export function* registerSubAccount({payload}){
 	}
 }
 
-// export function* registerGift({ payload: { eventId: id, gift } }) {
-// 	try {
-// 		const docRef = yield db.collection('events').doc(id);
-// 		yield docRef.update({
-// 			gifts: firestore.FieldValue.arrayUnion(gift)
-// 		});
-// 		const doc = yield docRef.get();
-// 		yield put(giftRegisterSuccess({ ...doc.data(), id: doc.id }));
-// 	} catch (error) {
-// 		yield put(giftRegisterFailure(error));
-// 		yield notify(error.message, 'error');
-// 	}
-// }
+export function* getPurchases({ payload: storeId }) {
+	try {
+		const collectionsRef = db.collection('purchases').where('meta.storeId', '==', storeId);
+		const channel = yield call(createProductStoreChannel, collectionsRef);
+		while (true) {
+			const purchases = yield take(channel);
+			console.log(purchases,55555)
+			yield put(getPurchasesSuccess(purchases));
+		}
+	} catch (error) {
+		yield put(getPurchasesFailure(error));
+		yield notify(error.message, 'error');
+	}
+}
+
+
 
 // export function* procceedWithPayout({ payload: { transferObj, userId } }) {
 // 	try {
@@ -240,6 +245,10 @@ export function* onRegisterSubAccountStart() {
 	yield takeLatest(ProductStoreActionTypes.REGISTER_SUBACC_START, registerSubAccount);
 }
 
+export function* onGetPurchasesStart() {
+	yield takeLatest(ProductStoreActionTypes.GET_PURCHASES_START, getPurchases);
+}
+
 
 // export function* onGiftRegisterStart() {
 // 	yield takeLatest(ProductStoreActionTypes.GIFT_REGISTER_START, registerGift);
@@ -254,8 +263,7 @@ export function* productStoreSagas() {
 		call(onProductStoreRegisterStart),
 		call(onGetProductStoreStart),
 		call(onProductRegisterStart),
-		// call(onGiftRegisterStart),
-		// call(onPayoutStart),
+		call(onGetPurchasesStart),
 		call(onRegisterSubAccountStart),
 		call(onGetNotificationsStart),
 		call(onClearNotificationsStart)

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
+// import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import ContactSupportOutlinedIcon from '@material-ui/icons/ContactSupportOutlined';
 import { Box, AppBar } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
@@ -53,23 +53,23 @@ function Navigation(props) {
 		
 		props.history.push(`/${newValue}`);
 	};
-	let unreadNotifications;
-	if(notifications){
-		 unreadNotifications = notifications.unreadNotifications;
-	}
+	// let unreadNotifications;
+	// if(notifications){
+	// 	 unreadNotifications = notifications.unreadNotifications;
+	// }
 	
 
-	const NotificationCount =  React.forwardRef((props,ref) => {
-		return (
-			<Box {...props} position="relative" ref={ref}>
-				{props.children}
-				{unreadNotifications &&
-					(unreadNotifications.length > 0 && (
-						<Box className={classes.notification}> {unreadNotifications.length} </Box>
-					))}
-			</Box>
-		);
-	});
+	// const NotificationCount =  React.forwardRef((props,ref) => {
+	// 	return (
+	// 		<Box {...props} position="relative" ref={ref}>
+	// 			{props.children}
+	// 			{unreadNotifications &&
+	// 				(unreadNotifications.length > 0 && (
+	// 					<Box className={classes.notification}> {unreadNotifications.length} </Box>
+	// 				))}
+	// 		</Box>
+	// 	);
+	// });
 	return (
 		<Fragment>
 			<AppBar position="sticky" >
@@ -79,13 +79,6 @@ function Navigation(props) {
 						value="profile"
 						className={classes.iconStyle}
 						icon={<HomeIcon />}
-					/>
-					<BottomNavigationAction
-						label="Notification"
-						value="notifications"
-						className={classes.iconStyle}
-						icon={<NotificationsIcon  />}
-						component={NotificationCount}
 					/>
 					<BottomNavigationAction
 						label="Products"

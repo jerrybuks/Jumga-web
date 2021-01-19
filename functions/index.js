@@ -26,10 +26,10 @@ exports.recordPayments = functions.https.onRequest(async (req, res) => {
 		
 		const {meta, currency, status, charged_amount} = verifyRes.data;
 		if (meta) {
+			functions.logger.log("data fromverification:", verifyRes.data);
 			if(meta.paymentType === "storeRegistration"){
 				// record the payment, no need though since they all pay the same amount
 				//so just update a status to show they've payed, update user isStoreVerified property
-				functions.logger.log("data fromverification:", verifyRes.data);
 				if(status === "successful" && currency === "USD" && charged_amount >= 20) {
 					await updateUserProperty(meta.id,{isStoreVerified: true},db)
 				}
@@ -37,7 +37,8 @@ exports.recordPayments = functions.https.onRequest(async (req, res) => {
 				// it means its going to be equal to purchase
 				// update ingo to the db where it should be
 				// const gifts = formatGifts(meta);
-            	// await updateGiftDetails(verifyRes, gifts, db);
+				// await updateGiftDetails(verifyRes, gifts, db);
+				await db.collection('purchases').add(verifyRes.data);
 			}
 		}
 	} catch (err) {
