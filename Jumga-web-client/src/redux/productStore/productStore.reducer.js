@@ -1,51 +1,69 @@
 import ProductActionTypes from './productStore.types';
 
 const INITIAL_STATE = {
-	storeDetails : {},
+	storeDetails : null,
+	products: [],
 	isRegistering: null,
-
-	events: [],
-	isFetchingEvents: true,
+	isFetchingProductStore: true,
 	isPayingout: null,
 	error: null, 
 	notifications: { unreadNotifications : [], readnotifications : [] },
-	shouldLoadNotifications: true
+	shouldLoadNotifications: true,
+	isSubmitting: null,
 };
 
 const eventReducer = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-        case ProductActionTypes.GET_PRODUCTSTORE_START:
+		case ProductActionTypes.GET_PRODUCTSTORE_SUCCESS:
 			return {
 				...state,
-				isFetchingEvents: true
+                isFetchingProductStore: false,
+				storeDetails: action.payload[0],
+				products: action.payload[0].products
 			};
-		case ProductActionTypes.GET_EVENTS_SUCCESS:
+		case ProductActionTypes.GET_PRODUCTSTORE_FAILURE:
 			return {
 				...state,
-                isFetchingEvents: false,
-                events: action.payload
-			};
-		case ProductActionTypes.GET_EVENTS_FAILURE:
-			return {
-				...state,
-                isFetchingEvents: false,
+                isFetchingProductStore: false,
                 error: action.payload
 			};
+			case ProductActionTypes.PRODUCTSTORE_REGISTER_START:
+				return {
+					...state,
+					isRegistering: true
+				};
+	
+	
+			case ProductActionTypes.PRODUCTSTORE_REGISTER_SUCCESS:
+				return {
+					...state,
+					isRegistering: false,
+					// store: action.payload
+				};
+			case ProductActionTypes.PRODUCTSTORE_REGISTER_FAILURE:
+				return {
+					...state,
+					isRegistering: false,
+					error: action.payload
+				};
 		/**currenty here */	
-		case ProductActionTypes.PRODUCTSTORE_REGISTER_START:
+		case ProductActionTypes.PRODUCT_REGISTER_START:
+		case ProductActionTypes.REGISTER_SUBACC_START:
 			return {
 				...state,
 				isRegistering: true
 			};
 
 
-		case ProductActionTypes.PRODUCTSTORE_REGISTER_SUCCESS:
+		case ProductActionTypes.PRODUCT_REGISTER_SUCCESS:
+		case ProductActionTypes.REGISTER_SUBACC_SUCCESS:
 			return {
 				...state,
                 isRegistering: false,
                 // store: action.payload
 			};
-		case ProductActionTypes.PRODUCTSTORE_REGISTER_FAILURE:
+		case ProductActionTypes.PRODUCT_REGISTER_FAILURE:
+		case ProductActionTypes.REGISTER_SUBACC_FAILURE:
 			return {
 				...state,
                 isRegistering: false,

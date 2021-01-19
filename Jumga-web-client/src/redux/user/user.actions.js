@@ -92,3 +92,18 @@ export const updateUserFailure = error => ({
   type: UserActionTypes.UPDATE_USER_FAILURE,
   payload: error
 });
+
+export const getUserUpdateStart = (userId) => ({
+  type: UserActionTypes.GET_USER_UPDATE_START,
+  payload: userId
+});
+
+export const  getUserUpdateSuccess = (user) => ({
+  type: UserActionTypes.GET_USER_UPDATE_SUCCESS,
+  payload: user
+});
+
+export const  getUserUpdateFailure = error => ({
+  type: UserActionTypes.GET_USER_UPDATE_FAILURE,
+  payload: error
+});

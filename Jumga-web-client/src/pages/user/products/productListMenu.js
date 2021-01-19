@@ -5,7 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { IconButton } from '@material-ui/core';
 // import { signOutStart } from '../../../redux/user/user.actions'
 
-export default function EventListMenu({status}) {
+export default function ProductListMenu() {
 	const [ anchorEl, setAnchorEl ] = React.useState(null);
 
 	const handleClick = (event) => {
@@ -16,7 +16,7 @@ export default function EventListMenu({status}) {
 		setAnchorEl(null);
 	};
 	return <div> 
-     {status === "open" && <Fragment>
+     <Fragment>
      <IconButton  aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} >
           <MoreVertIcon />
       </IconButton>
@@ -30,7 +30,7 @@ export default function EventListMenu({status}) {
         <MenuItem onClick={handleClose}>edit</MenuItem>
         <MenuItem onClick={handleClose}>close</MenuItem>
       </Menu>
-     </Fragment>} 
+     </Fragment>
     </div>
 }
 

@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 // import { currencyList, getCurrencySymbol } from '../../../utils/formatCurrency';
-import events from '../events';
+import events from '../products';
 import { getCurrency } from 'country-currency-map';
 
 function GiftForm(props) {
