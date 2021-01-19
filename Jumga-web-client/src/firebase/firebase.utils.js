@@ -50,13 +50,14 @@ export const getCurrentUser = () => {
   });
 };
 
-export const createEventChannel = (ref) => {
+export const createProductStoreChannel = (ref) => {
   const listener = eventChannel((emit) => {
     const unsubscribe = ref.onSnapshot(function (querySnapshot) {
       const data = [];
       querySnapshot.forEach(function (doc) {
         data.push({ ...doc.data(), id: doc.id });
       });
+      console.log(data,44444)
       emit(data);
     });
 
@@ -66,9 +67,28 @@ export const createEventChannel = (ref) => {
   return listener;
 };
 
+export const createUserEventChannel = (ref) => {
+  const listener = eventChannel((emit) => {
+    const unsubscribe = ref.onSnapshot(function (doc) {
+      // const data = [];
+      // querySnapshot.forEach(function (doc) {
+      //   data.push({ ...doc.data(), id: doc.id });
+      // });
+      console.log({ ...doc.data(), id: doc.id })
+      emit({ ...doc.data(), id: doc.id });
+    });
+
+    return () => unsubscribe;
+  });
+
+  return listener;
+};
+
+
 export function uploadFileChannel(file) {
   return eventChannel((emit) => {
-    const uploadTask = storage.ref(`images/${file.name}`).put(file);
+    const modifiedName = new Date().getTime() + file.name
+    const uploadTask = storage.ref(`images/${modifiedName}`).put(file);
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -85,7 +105,7 @@ export function uploadFileChannel(file) {
       () => {
         storage
           .ref("images")
-          .child(file.name)
+          .child(modifiedName)
           .getDownloadURL()
           .then((url) => {
             emit({ url });

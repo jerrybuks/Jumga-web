@@ -88,8 +88,8 @@ function Navigation(props) {
 						component={NotificationCount}
 					/>
 					<BottomNavigationAction
-						label="Events"
-						value="events"
+						label="Products"
+						value="products"
 						className={classes.iconStyle}
 						icon={<StoreIcon  />}
 					/>

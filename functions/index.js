@@ -3,8 +3,8 @@ const admin = require('firebase-admin');
 const cors = require('cors')({origin: true});
 
 const utils = require('./utils');
-const { getBanks, getBankBranches, resolveAcct, resolveAcctTest, initTranser, recordPayoutToDb, checkTransfer } = require('./handleBankingRequests');
-const { checkHash, verifyTransaction, updateUserProperty, formatGifts, updateGiftDetails } = utils
+const { getBanks, getBankBranches, recordPayoutToDb } = require('./handleBankingRequests');
+const { checkHash, verifyTransaction, createSubAccount, updateUserProperty, getCollection } = utils
 
 
 
@@ -48,52 +48,77 @@ exports.recordPayments = functions.https.onRequest(async (req, res) => {
 });
 
 
-// exports.getBanksByCountry = functions.https.onRequest( (req, res) => {
-// 	cors(req, res, async () => {
-// 		try {
-// 			const request = JSON.parse(req.rawBody);
-// 			const banks = await getBanks(request.countryAbbre);
-// 			// const banks = await getBanks("NG");
+exports.getBanksByCountry = functions.https.onRequest( (req, res) => {
+	cors(req, res, async () => {
+		try {
+			const request = JSON.parse(req.rawBody);
+			const banks = await getBanks(request.countryAbbre);
+			// const banks = await getBanks("NG");
 	
-// 			res.status(200).send(banks);
-// 		} catch (err) {
-// 			res.send(err);
-// 		}
-//     })
-// });
+			res.status(200).send(banks);
+		} catch (err) {
+			res.send(err);
+		}
+    })
+});
 
 
-// exports.getBranchesByBank = functions.https.onRequest( (req, res) => {
-// 	cors(req, res, async () => {
-// 		try {
-// 			const request = JSON.parse(req.rawBody);
-// 			const banks = await getBankBranches(request.bankCode);
-// 			// const banks = await getBankBranches(280);
+exports.getBranchesByBank = functions.https.onRequest( (req, res) => {
+	cors(req, res, async () => {
+		try {
+			const request = JSON.parse(req.rawBody);
+			const banks = await getBankBranches(request.bankCode);
+			// const banks = await getBankBranches(280);
 	
-// 			res.status(200).send(banks);
-// 		} catch (err) {
-// 			res.send(err);
-// 		}
-//     })
-// });
+			res.status(200).send(banks);
+		} catch (err) {
+			res.send(err);
+		}
+    })
+});
 
-// exports.resolveAccountDetails = functions.https.onRequest( (req, res) => {
-// 	cors(req, res, async () => {
-// 		try {
-// 			const request = JSON.parse(req.rawBody);
-// 			let accountDetail;
-// 			if(request.account_number.slice(0, 8) === "06900000"){
-// 				accountDetail = await resolveAcctTest(request);
-// 			} else {
-// 				accountDetail = await resolveAcct(request);
-// 			}
-			
-// 			res.status(200).send(accountDetail);
-// 		} catch (err) {
-// 			res.send(err);
-// 		}
-//     })
-// });
+exports.createSubAccount = functions.https.onRequest( (req, res) => {
+	cors(req, res, async () => {
+		try {
+			const request = JSON.parse(req.rawBody);
+			const subAccdet = await createSubAccount(request.subAcc);
+			if(subAccdet.status === "success"){
+				const userMeta = request.subAcc.meta[0]
+				if(userMeta.meta_name === "dispatchRider"){
+					const newDispatcher = {
+						subaccount_id: subAccdet.data.subaccount_id,
+						...request
+					}
+					await db.collection('dispatchers').add(newDispatcher);
+				} else {
+					//get a random dispatcher's id and dispatcher sub-account id
+					const dataCollection = await getCollection(db)
+					const dispatcher = dataCollection[Math.floor(Math.random() * dataCollection.length)]
+					functions.logger.log("request obj:", dataCollection);
+					const updateInfo = {
+						dispatcherId: dispatcher.id,
+						dispatcherSubAccId: dispatcher.subaccount_id,
+						subaccount_id: subAccdet.data.subaccount_id
+					}
+					const storeDocRef = await db.collection("stores").doc(userMeta.meta_storeId);
+    				await storeDocRef.update(updateInfo);
+
+					const userDocRef = await db.collection("users").doc(userMeta.meta_userId);
+    				await userDocRef.update({ isSubAccount: true});
+					//update store with the disaptcher det (id and sub acc) and sunaccount id 
+					//update the users isSubAccount field
+				}
+				
+			}
+			res.status(200).send(subAccdet);
+		} catch (err) {
+			console.log(err)
+			res.send(err);
+		}
+    })
+});
+
+
 
 // exports.handlePayOut = functions.https.onRequest( (req, res) => {
 // 	cors(req, res, async () => {

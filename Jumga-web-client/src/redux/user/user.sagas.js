@@ -1,7 +1,7 @@
-import { takeLatest, put, all, call } from 'redux-saga/effects';
+import { takeLatest, take, put, all, call } from 'redux-saga/effects';
 import { notify } from '../../utils/notify';
 import UserActionTypes from './user.types';
-import { db } from '../../firebase/firebase.utils';
+import { db, createUserEventChannel } from '../../firebase/firebase.utils';
 
 import {
 	signInSuccess,
@@ -14,7 +14,9 @@ import {
 	sendEmailVerifyFailure,
 	sendPasswordResetSuccess,
 	sendPasswordResetFailure,
-	updateUserFailure
+	updateUserFailure,
+	getUserUpdateFailure,
+	getUserUpdateSuccess
 } from './user.actions';
 
 import { auth, googleProvider, createUserProfileDocument, getCurrentUser } from '../../firebase/firebase.utils';
@@ -119,6 +121,24 @@ export function* updateUserDetail({ payload: { userId, userData } }) {
 	}
 }
 
+export function* getUserUpdate({ payload: userId }) {
+	try {
+		// const {payload} = yield take('REQUEST')
+
+		const userRef = yield db.collection('users').doc(userId);
+		console.log(userRef,333333)
+		const channel = yield call(createUserEventChannel, userRef);
+		while (true) {
+			const updatedUser = yield take(channel);
+			console.log("user updated....",updatedUser)
+			yield put(getUserUpdateSuccess(updatedUser));
+		}
+	} catch (error) {
+		yield put(getUserUpdateFailure(error));
+		yield notify(error.message, 'error');
+	}
+}
+
 export function* signInAfterSignUp({ payload: { user, additionalData } }) {
 	yield getSnapshotFromUserAuth(user, additionalData);
 }
@@ -158,10 +178,14 @@ export function* onSendPasswordResetStart() {
 export function* onUpdateUserStart() {
 	yield takeLatest(UserActionTypes.UPDATE_USER_START, updateUserDetail);
 }
+export function* onGetUserUpdateStart() {
+	yield takeLatest(UserActionTypes.GET_USER_UPDATE_START, getUserUpdate);
+}
 
 export function* userSagas() {
 	yield all([
 		call(onGoogleSignInStart),
+		call(onGetUserUpdateStart),
 		call(onEmailSignInStart),
 		call(onCheckUserSession),
 		call(onSignOutStart),

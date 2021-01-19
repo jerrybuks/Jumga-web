@@ -10,14 +10,15 @@ import { createStructuredSelector } from "reselect";
 import { connect } from "react-redux";
 import { useStyles } from "./styles";
 import { productStoreRegisterStart } from "../../../redux/productStore/productStore.actions";
+import SubAccountForm from "../../shared/dispatchRider/SubAccount";
 
 function CountrySelector({ productStoreRegisterStart, user, isSaving, isReAuthenticating, history }) {
-  const countryOptions = countryList().getData();
   const [state, setstate] = useState({
     country: null,
     storeCat: null,
     storeName: "",
     storeCoverImg: "",
+    phoneNo: "",
     isLargeFile: false,
     storeDesc: "",
   });
@@ -33,7 +34,7 @@ function CountrySelector({ productStoreRegisterStart, user, isSaving, isReAuthen
       history.push("/verifyStore");
     }
   }, [user.hasStore, history]);
-  const { storeName, storeDesc, isLargeFile, storeCat, country } = state;
+  const { storeName, storeDesc, isLargeFile, storeCat, country, phoneNo } = state;
   const handleChange = (e) => {
     console.log(e);
     setstate({ ...state, [e.target.name]: e.target.value });
@@ -64,8 +65,9 @@ function CountrySelector({ productStoreRegisterStart, user, isSaving, isReAuthen
       storeCat &&
       country
     ) {
-      const countryDet = getCountry(country.label);
-      let currency = countryDet?.currency || "USD";
+      // const countryDet = getCountry(country.label);
+      // let currency = countryDet?.currency || "USD";
+      let currency = "USD";
 
       const { isLargeFile, ...storeInfo } = state;
       console.log({ ...storeInfo, currency });
@@ -86,6 +88,19 @@ function CountrySelector({ productStoreRegisterStart, user, isSaving, isReAuthen
             Settting up Store...
           </Box>
           <Box mb="1rem">
+            <FormTextField
+              id="outlined-size-small"
+              variant="outlined"
+              size="small"
+              type="number"
+              name="phoneNo"
+              placeholder="Phone No"
+              value={phoneNo}
+              onChange={handleChange}
+              required
+            />
+        </Box>
+          <Box mb="1rem">
             <Box textAlign="left">
               <FormLabel htmlFor="files">
                 select a cover image for your store
@@ -97,7 +112,6 @@ function CountrySelector({ productStoreRegisterStart, user, isSaving, isReAuthen
               size="small"
               type="file"
               onChange={handleFileSelect}
-              required
             />
             {isLargeFile && (
               <Box my={2} textAlign="left" color="red">
@@ -151,7 +165,7 @@ function CountrySelector({ productStoreRegisterStart, user, isSaving, isReAuthen
             <Select
               name="country"
               placeholder="select your country"
-              options={countryOptions}
+              options={countries}
               value={state.country}
               onChange={(e) => SelectChangeHandler(e, "country")}
               required
@@ -198,3 +212,11 @@ const mapStateToProps = createStructuredSelector({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CountrySelector);
+
+const countries = [
+  { value: "NG", label: "Nigeria" },
+  { value: "KE", label: "Kenya" },
+  { value: "GH", label: "Ghana" },
+  { value: "UK", label: "United Kingdom" },
+];
+

@@ -26,3 +26,8 @@ export const selectIsSendingEmail = createSelector(
   [selectUser],
   user => user.isSendingEmail
 );
+
+export const selectLoadUpdatedUser = createSelector(
+  [selectUser],
+  user => user.shouldLoadUpdatedUser
+);

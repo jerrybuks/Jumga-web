@@ -14,15 +14,29 @@ export const useStyles = makeStyles((theme) => ({
       // overflowY: "scroll",
       // maxHeight: "96vh"
     },
-    eventCard: {
+    productCard: {
       padding: "1rem",
       margin: "1rem",
       boxShadow: "0 10px 25px 0 rgba(0,0,0,.08)",
       borderRadius: "10px",
     },
-    eventName: {
-      color: theme.palette.primary.light,
+    productName: {
+      color: theme.palette.primary.main,
       cursor: "pointer",
+    },
+    productImg: {
+      width: 70,
+      borderRadius: "50%",
+    },
+    productWithoutImg: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      color: "darkgrey",
+      width: 70,
+      borderRadius: "50%",
+      backgroundColor: "whitesmoke",
+      height: 70
     },
     appBar: {
         position: 'relative',

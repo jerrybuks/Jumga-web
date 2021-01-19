@@ -15,21 +15,52 @@ export const productStoreRegisterFailure = error => ({
   payload: error
 });
 
+export const productRegisterStart = (productCredentials) => ({
+  type: ProductStoreActionTypes.PRODUCT_REGISTER_START,
+  payload: productCredentials
+});
 
-export const getEventsStart = (userId) => ({
+export const productRegisterSuccess = (event) => ({
+  type: ProductStoreActionTypes.PRODUCT_REGISTER_SUCCESS,
+  payload: event
+});
+
+export const productRegisterFailure = error => ({
+  type: ProductStoreActionTypes.PRODUCT_REGISTER_FAILURE,
+  payload: error
+});
+
+export const getProductStoreStart = (userId) => ({
   type: ProductStoreActionTypes.GET_PRODUCTSTORE_START,
   payload: userId
 });
 
-export const  getEventsSuccess = (events) => ({
-  type: ProductStoreActionTypes.GET_EVENTS_SUCCESS,
-  payload: events
+export const  getProductStoreSuccess = (storeDet) => ({
+  type: ProductStoreActionTypes.GET_PRODUCTSTORE_SUCCESS,
+  payload: storeDet
 });
 
-export const  getEventsFailure = error => ({
-  type: ProductStoreActionTypes.GET_EVENTS_FAILURE,
+export const  getProductStoreFailure = error => ({
+  type: ProductStoreActionTypes.GET_PRODUCTSTORE_FAILURE,
   payload: error
 });
+
+export const registerSubStoreStart = (data) => ({
+  type: ProductStoreActionTypes.REGISTER_SUBACC_START,
+  payload: data
+});
+
+export const  registerSubStoreSuccess = (data) => ({
+  type: ProductStoreActionTypes.REGISTER_SUBACC_SUCCESS,
+  payload: data
+});
+
+export const  registerSubStoreFailure = error => ({
+  type: ProductStoreActionTypes.REGISTER_SUBACC_FAILURE,
+  payload: error
+});
+
+//abstract
 
 export const getNotificationsStart = (userId) => ({
   type: ProductStoreActionTypes.GET_NOTIFICATIONS_START,
@@ -62,11 +93,6 @@ export const  clearNotificationsFailure = error  => ({
 });
 
 // remove later
-export const eventRegisterStart = (eventCredentials) => ({
-  type: ProductStoreActionTypes.EVENT_REGISTER_START,
-  payload: eventCredentials
-});
-
 export const giftRegisterStart = (giftDetails) => ({
   type: ProductStoreActionTypes.GIFT_REGISTER_START,
   payload: giftDetails

@@ -9,20 +9,34 @@ export const useStyles = makeStyles((theme) => ({
   crossText: {
     textDecoration: "line-through"
   },
-  giftCard: {
+  coverImg: {
+    width: 120,
+    height: 120,
+    borderRadius: "50%"
+  },
+  productCard: {
     padding: "1rem",
     margin: "1rem",
     boxShadow: "0 10px 25px 0 rgba(0,0,0,.08)",
     borderRadius: "10px",
   },
-  giftName: {
-    color: theme.palette.primary.light,
+  productName: {
+    color: theme.palette.primary.main,
     cursor: "pointer",
   },
-  coverImg: {
-    width: 120,
-    height: 120,
-    borderRadius: "50%"
+  productImg: {
+    width: 70,
+    borderRadius: "50%",
+  },
+  productWithoutImg: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "darkgrey",
+    width: 70,
+    borderRadius: "50%",
+    backgroundColor: "whitesmoke",
+    height: 70
   },
   appBar: {
       position: 'relative',
@@ -37,8 +51,61 @@ export const useStyles = makeStyles((theme) => ({
           fontSize: 10
         },
       },
-    // customGiftBtn: {
-    //   backgroundColor: "#106ba3"
-    // }
+    changeItemNumber: {
+      alignSelf: "flex-start",
+      marginTop: 8,
+      width: 89,
+      height: 20,
+      background: "#f6f6f6",
+      borderRadius: 7,
+      position: "relative",
+      display: "flex",
+      marginLeft: 15
+    },
+    itemDecreaseNumber:{
+      position: "absolute",
+      width: 20,
+      height: 20,
+      background: "#ececec",
+      borderRadius: 7,
+      fontSize: 14,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer"
+    },
+    itemIncreaseNumber:{
+      position: "absolute",
+      right: 0,
+      width: 20,
+      height: 20,
+      background: "#ececec",
+      borderRadius: 7,
+      fontSize: 14,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer"
+    },
+    itemCountInput:{
+      width: "60%",
+      border: "none",
+      background: "none",
+      fontWeight: "normal",
+      fontSize: 11,
+      lineHeight: 20,
+      color:"#000000",
+      textAlign: "center",
+      paddingLeft: "40%",
+
+      '&::placeholder': {
+        fontWeight: "normal",
+        fontSize: 11,
+        lineHeight: 20,
+        color: "#000000",
+        textAlign: "center"
+    }
+  }
+  
 }));
 

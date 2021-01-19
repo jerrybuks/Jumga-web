@@ -20,7 +20,7 @@ const AuthPage = (props) => {
   const classes = useStyles();
   const { history, currentUser } = props;
   const [settingUp, setSettingUp] = useState(true);
-  console.log(currentUser, 888888);
+  console.log(currentUser, 111111);
   useEffect(() => {
     if (currentUser) {
       currentUser.isVerified
