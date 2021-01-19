@@ -27,6 +27,15 @@ export const selectIsFetchingProductStore = createSelector(
   productStore => productStore.isFetchingProductStore
 );
 
+export const selectIsGettingPurchases = createSelector(
+  [selectProductStore],
+  productStore => productStore.IsGettingPurchases
+);
+
+export const selectPurchases = createSelector(
+  [selectProductStore],
+  productStore => productStore.purchases
+);
 
 // old
 const selectEventsState = state => state.productStore;

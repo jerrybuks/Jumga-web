@@ -5,6 +5,8 @@ const INITIAL_STATE = {
 	products: [],
 	isRegistering: null,
 	isFetchingProductStore: true,
+	purchases: [],
+	isGettingPurchases: null,
 	isPayingout: null,
 	error: null, 
 	notifications: { unreadNotifications : [], readnotifications : [] },
@@ -70,6 +72,24 @@ const eventReducer = (state = INITIAL_STATE, action) => {
                 error: action.payload
 			};
 		/**currenty here */	
+		case ProductActionTypes.GET_PURCHASES_START:
+			return {
+				...state,
+				isGettingPurchases: true
+			}
+		case ProductActionTypes.GET_PURCHASES_SUCCESS:
+			console.log(action.payload,111111)
+			return {
+				...state,
+				purchases: action.payload,
+				isGettingPurchases: false
+			}
+		case ProductActionTypes.GET_PURCHASES_FAILURE:
+			return {
+				...state,
+				error: action.payload,
+				isGettingPurchases: false
+			}
 
 		case ProductActionTypes.GIFT_REGISTER_SUCCESS:
 			return {

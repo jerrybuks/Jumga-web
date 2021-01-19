@@ -17,8 +17,6 @@ function GiftPurchaseForm(props) {
     items,
     cantEditName,
     cantEditAmount,
-    giftType,
-    match: { params },
     totalItemAmount,
     currency,
   } = props;
@@ -33,7 +31,7 @@ function GiftPurchaseForm(props) {
  
   const disaptchRiderEarning = 0.8 * deliveryFee;
   const storeOwnerEarning = 0.95 * totalItemAmount;
-
+ console.log(props.storeDet,88888)
   const config = {
     public_key: process.env.REACT_APP_FW_PUBLIC_KEY,
     tx_ref: Date.now(),
@@ -43,10 +41,9 @@ function GiftPurchaseForm(props) {
     payment_options: "account,card,banktransfer,mobilemoney,ussd",
     customer: {
       email: state.email,
-      //   phonenumber: '09050386548',
       name: state.name,
     },
-    meta: { storeId: params.storeId, giftType, productName: state.productName },
+    meta: { storeId:props.storeDet.docId, paymentType: "purchase", productName: state.productName },
     subaccounts: [
       {
         id: props.storeDet.subaccount_id,
@@ -62,11 +59,11 @@ function GiftPurchaseForm(props) {
       },
     ],
     customizations: {
-      title: "Gift Items(s)",
-      description: "Gift the items selected",
-      //   logo: 'https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg',
+      title: "Purchase Items(s)",
+      description: "Purchase the items selected"
     },
   };
+
   const handleFlutterPayment = useFlutterwave(config);
   useEffect(() => {
     let itemsName = "";
@@ -105,21 +102,9 @@ function GiftPurchaseForm(props) {
       handleFlutterPayment({
         callback: (response) => {
           console.log(response);
-          //verify transaction
-          //if verification is successful, post details to firebase
-          //else throw error
-          if (
-            response.status === "completed" ||
-            response.status === "successful"
-          ) {
-            //post details to fireabse
-            //direct to thank you page
-          } else {
-            console.log("transaction failed");
-          }
         },
         onClose: () => {
-          console.log("I closed bro");
+          console.log("closed");
         },
       });
       return true;
