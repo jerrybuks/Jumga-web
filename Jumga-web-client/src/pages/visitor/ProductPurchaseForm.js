@@ -87,9 +87,6 @@ function GiftPurchaseForm(props) {
     const { name, value } = e.target;
     setstate({ ...state, [name]: value, isExists: false });
     if (!cantEditAmount) {
-      console.log(state);
-      let customGift = "";
-      if (!cantEditName) customGift = "custom-";
       setstate((state) => ({
         ...state,
         [name]: value,
@@ -129,7 +126,7 @@ function GiftPurchaseForm(props) {
     }
   };
 
-  const { productName, amount, name, email } = state;
+  const { productName, name, email } = state;
   console.log(totalItemAmount, 333333333);
   return (
     <div>

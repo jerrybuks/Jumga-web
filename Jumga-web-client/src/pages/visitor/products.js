@@ -42,6 +42,7 @@ const ProductItemsContainer = ({ storeDet }) => {
       console.log(7777777777777, sumVal);
       setSum(sumVal);
     }
+    // eslint-disable-next-line 
   }, [selected]);
 
   const handleSelect = (addItem) => {
@@ -143,6 +144,7 @@ const ProductItem = ({ product, selectItem, handleItemCountChange }) => {
 
   useEffect(() => {
     handleItemCountChange({ ...product, quantity: itemCount });
+    // eslint-disable-next-line 
   }, [itemCount]);
 
   const increment = () => {

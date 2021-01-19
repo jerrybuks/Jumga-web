@@ -17,6 +17,7 @@ function VerifyStore({user, getProductStoreStart, isLoading, productStoreDet,   
             getUserUpdateStart(user.id);
           }
         getProductStoreStart(user.id)
+        // eslint-disable-next-line 
     }, [])
     const config = {
 		public_key: process.env.REACT_APP_FW_PUBLIC_KEY,

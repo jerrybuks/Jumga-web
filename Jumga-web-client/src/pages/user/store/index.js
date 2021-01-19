@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import countryList from "react-select-country-list";
 import { Button, Box, CircularProgress, FormLabel } from "@material-ui/core";
-import { getCountry } from "country-currency-map";
 import { FormTextField } from "../../../components/formTextField";
 import { selectCurrentUser, selectIsAuthenticating } from "../../../redux/user/user.selectors";
 import { selectIsRegistering } from "../../../redux/productStore/productStore.selector";
@@ -10,7 +8,6 @@ import { createStructuredSelector } from "reselect";
 import { connect } from "react-redux";
 import { useStyles } from "./styles";
 import { productStoreRegisterStart } from "../../../redux/productStore/productStore.actions";
-import SubAccountForm from "../../shared/dispatchRider/SubAccount";
 
 function CountrySelector({ productStoreRegisterStart, user, isSaving, isReAuthenticating, history }) {
   const [state, setstate] = useState({

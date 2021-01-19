@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 const cors = require('cors')({origin: true});
 
 const utils = require('./utils');
-const { getBanks, getBankBranches, recordPayoutToDb } = require('./handleBankingRequests');
+const { getBanks, getBankBranches } = require('./handleBankingRequests');
 const { checkHash, verifyTransaction, createSubAccount, updateUserProperty, getCollection } = utils
 
 

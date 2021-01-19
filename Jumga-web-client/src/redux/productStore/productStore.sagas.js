@@ -7,11 +7,6 @@ import {
 	getNotificationsFailure,
 	clearNotificationsSuccess,
 	clearNotificationsFailure,
-	giftRegisterSuccess,
-	giftRegisterFailure,
-	payoutSuccess,
-	payoutFailure,
-
 	productStoreRegisterSuccess,
 	productStoreRegisterFailure,
 	productRegisterSuccess,
