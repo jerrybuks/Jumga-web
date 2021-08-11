@@ -28,10 +28,6 @@ jobs:
       working-directory: ./Jumga-web-client
       run: npm install
 
-    - name: Run the tests and generate coverage report
-      working-directory: ./Jumga-web-client
-      run: npm test -- --coverage
-
     - name: Build
       working-directory: ./Jumga-web-client
       run: npm run build
