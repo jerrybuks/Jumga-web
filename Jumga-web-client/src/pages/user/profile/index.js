@@ -18,8 +18,11 @@ import {
 import { selectCurrentUser } from "../../../redux/user/user.selectors";
 import { createStructuredSelector } from "reselect";
 import Spinner from "../../../components/spinner/Spinner";
-import { Box } from "@material-ui/core";
-// import { useStyles } from "./styles";
+import { Box, Card } from "@material-ui/core";
+import EmptyPurchase from "../../../components/EmptyPurchase";
+import { formatLocaleCurrency } from "country-currency-map";
+import { useStyles } from "./styles";
+
 
 const Profile = (props) => {
   const {
@@ -31,7 +34,7 @@ const Profile = (props) => {
     storeDet,
     products,
   } = props;
-//   const classes = useStyles();
+  const classes = useStyles();
   useEffect(
     () => {
       if (userId && products.length === 0) getProductStoreStart(userId);
@@ -58,8 +61,42 @@ console.log(purchases,999)
           <Box px="1rem">well done, you are making sales!</Box>
         )}
         <Box px="1rem" component="h3">
-          Recent Purchases
+          Recent Sales
         </Box>
+        {purchases.length === 0 ? <EmptyPurchase /> :
+        <Card className={classes.profileCard}>
+         {purchases
+         .slice(0, 3)
+         .map(
+           ({
+             meta,
+             customer,
+             amount_settled,
+             currency,
+             created_at,
+             tx_ref,
+           }) => (
+             <Box key={tx_ref}>
+               <Box py="5px">
+                 <Box component="span" fontWeight="bold">
+                   {customer.name}
+                 </Box>
+                 <Box component="span"> bought</Box>
+                 <Box component="span" fontStyle="italic">
+                   {" "}
+                   "{meta.productName }"
+                 </Box>
+                 <Box component="span"> from you, at</Box>
+                 <Box component="span" color="red">
+                   {" "}
+                   {formatLocaleCurrency(amount_settled, currency)}
+                 </Box>
+                 <Box component="span"> {`on ${ new Date(created_at).toISOString().split('T')[0].replace(/-/g, '/')}`}</Box>
+               </Box>
+             </Box>
+           )
+         )}
+        </Card>}
         {/* <Card className={classes.profileCard}>
           {unreadNotifications.length > 0 ? (
             <Fragment>

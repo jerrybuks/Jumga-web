@@ -29,7 +29,6 @@ function MenuBar({ signOutStart }) {
       >
         <MenuItem onClick={handleClose}>Update Profile</MenuItem>
         <MenuItem onClick={() => signOutStart()}>Logout</MenuItem>
-        <MenuItem onClick={handleClose}>app updates</MenuItem>
       </Menu>
     </div>;
 }

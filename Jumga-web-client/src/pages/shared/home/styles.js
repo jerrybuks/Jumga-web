@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import homeBck from '../../../assets/shopping.jpg'
 export const useStyles = makeStyles(theme => ({
-    root: {
+    rootBtn: {
         color: `${theme.palette.common.white}`,
         margin: theme.spacing(3),
         border: `1px solid ${theme.palette.common.white}`
