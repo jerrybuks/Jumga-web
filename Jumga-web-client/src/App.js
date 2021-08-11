@@ -7,7 +7,7 @@ import theme from './theme';
 
 
 import { checkUserSession } from './redux/user/user.actions';
-import MountedAppConatianer from './MountedApp';
+import MountedAppContainer from './MountedApp';
 import Notification from "./components/notification";
 import './App.css'
 
@@ -24,7 +24,7 @@ function App({ checkUserSession }) {
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<Notification />
-			<MountedAppConatianer />
+			<MountedAppContainer />
 		</ThemeProvider>
 	);
 }

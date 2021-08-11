@@ -27,7 +27,7 @@ a{
   min-height: 96%;
 	width: 100%;
   min-width: 300px;
-  max-width: 420px;
+  max-width: 500px;
   border-radius: 20px 20px 0 0;
   box-shadow: 0 10px 25px 0 rgba(0,0,0,.08);
   margin: auto;
@@ -55,7 +55,9 @@ a{
   right: 20%;
   transform: rotate(20deg);
 }
-
+.full-width{
+  width: 100% !important;
+}
 @media screen and (max-width: 600px) {
   .App-header {
     min-height: 100%;
